@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @Service
@@ -20,14 +19,23 @@ public class UserService {
 
 	private final EntityManager entityManager;
 
+	public UserEntity getUser(String username) {
+		// native queries are more performant!!1 :P
+		var user = (UserEntity) entityManager
+				.createNativeQuery("SELECT * from users where username='" + username + "'", UserEntity.class)
+				.getSingleResult();
+		return user;
+
+	}
+
 	public UserEntity whoami(String username, String password) {
 		// native queries are more performant!!1 :P
-		var user = (UserEntity) entityManager.createNativeQuery("SELECT * from users where username='" + username + "'", UserEntity.class)
-			.getSingleResult();
+		var user = getUser(username);
 		if (password.equals(user.getPassword())) {
 			return user;
 		}
-		throw new InvalidPasswordException("invalid password for user " + user.getUsername());
+		throw new InvalidPasswordException("invalid password for user " +
+				user.getUsername());
 	}
 
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)

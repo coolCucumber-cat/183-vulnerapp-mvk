@@ -19,7 +19,8 @@ public class HealthService {
 
 	@SneakyThrows
 	public String health(String host) {
-		// lookup the local actuator health endpoint, and login as admin, to get extra details
+		// lookup the local actuator health endpoint, and login as admin, to get extra
+		// details
 		var admin = userRepository.getReferenceById("admin");
 		var url = new URL("http://" + host + "/actuator/health"); // always connect to ourselves here
 		var urlConnection = url.openConnection();
