@@ -38,7 +38,7 @@ public class SecurityConfiguration {
 			HttpSecurity http, RestfulFormService restfulFormService) {
 		return http.formLogin(restfulFormService.restfulFormLogin())
 				.exceptionHandling(restfulFormService.unauthorizedPerDefault())
-				.csrf(x -> x.disable())
+				.csrf(x -> x.spa().ignoringRequestMatchers("/login"))
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/**")
 						.authenticated()
 						.anyRequest()

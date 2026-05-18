@@ -33,7 +33,8 @@ public class RestfulFormService {
 	 */
 	public Customizer<FormLoginConfigurer<HttpSecurity>> restfulFormLogin() {
 		return form -> form
-				.failureHandler((req, res, ex) -> res.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getMessage()))
+				.failureHandler(
+						(req, res, ex) -> res.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getMessage()))
 				.successHandler((request, response, auth) -> {
 					response.setStatus(HttpServletResponse.SC_OK);
 					response.setContentType("application/json");
